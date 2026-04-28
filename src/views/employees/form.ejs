@@ -1,0 +1,71 @@
+<div class="card shadow-sm mb-4">
+    <div class="card-body p-4">
+        <h2 class="mb-4"><%= typeof employee !== 'undefined' ? 'Edit Employee' : 'Add New Employee' %></h2>
+        
+        <form action="<%= typeof employee !== 'undefined' ? '/employees/' + employee.id : '/employees' %>" method="POST">
+            
+            <div class="row g-4">
+                <!-- Column 1: Basic Info -->
+                <div class="col-md-6">
+                    <h4 class="mb-3 border-bottom pb-2">Basic Information</h4>
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-control" value="<%= typeof employee !== 'undefined' ? employee.name : '' %>" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="department_id" class="form-label">Department</label>
+                        <select id="department_id" name="department_id" class="form-select" required>
+                            <option value="">Select Department...</option>
+                            <% if (typeof departments !== 'undefined') { %>
+                                <% departments.forEach(function(dept) { %>
+                                    <option value="<%= dept.id %>" <%= typeof employee !== 'undefined' && employee.department_id == dept.id ? 'selected' : '' %>>
+                                        <%= dept.name %>
+                                    </option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="position" class="form-label">Position / Job Title</label>
+                        <input type="text" id="position" name="position" class="form-control" value="<%= typeof employee !== 'undefined' ? employee.position : '' %>" required>
+                    </div>
+                </div>
+                
+                <!-- Column 2: Salary Info -->
+                <div class="col-md-6">
+                    <h4 class="mb-3 border-bottom pb-2">Salary Information</h4>
+                    
+                    <div class="mb-3">
+                        <label for="basic_salary" class="form-label">Basic Salary (RM)</label>
+                        <input type="number" step="0.01" id="basic_salary" name="basic_salary" class="form-control" value="<%= typeof employee !== 'undefined' ? employee.basic_salary : '' %>" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="allowance" class="form-label">Fixed Allowance (RM)</label>
+                        <input type="number" step="0.01" id="allowance" name="allowance" class="form-control" value="<%= typeof employee !== 'undefined' ? employee.allowance : '0.00' %>" required>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="hourly_rate" class="form-label">OT Hourly Rate (RM)</label>
+                            <input type="number" step="0.01" id="hourly_rate" name="hourly_rate" class="form-control" value="<%= typeof employee !== 'undefined' ? employee.hourly_rate : '0.00' %>" required>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <label for="overtime_hours" class="form-label">Default OT Hours (Optional)</label>
+                            <input type="number" id="overtime_hours" name="overtime_hours" class="form-control" value="<%= typeof employee !== 'undefined' ? employee.overtime_hours : '0' %>">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 pt-3 border-top">
+                <button type="submit" class="btn btn-primary">Save Employee Data</button>
+                <a href="/employees" class="btn btn-light ms-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

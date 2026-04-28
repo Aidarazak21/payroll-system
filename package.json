@@ -1,0 +1,25 @@
+{
+  "name": "payroll-system",
+  "version": "1.0.0",
+  "description": "(Coming soon)",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.19.0",
+    "mssql": "^12.5.0"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
+}

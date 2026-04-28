@@ -1,0 +1,99 @@
+<div class="row g-4">
+    <!-- Main Form Column -->
+    <div class="col-lg-7">
+        <div class="card shadow-sm h-80">
+            <div class="card-body p-4">
+                <h2 class="mb-3">Run Monthly Payroll</h2>
+                <p class="text-muted mb-4">Select a month and year to process payroll for all employees.</p>
+                
+                <form action="/payroll/run" method="POST">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="month" class="form-label">Month</label>
+                            <select id="month" name="month" class="form-select" required>
+                                <% const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; %>
+                                <% months.forEach((m, i) => { %>
+                                    <option value="<%= i + 1 %>" <%= (new Date().getMonth() + 1) === (i + 1) ? 'selected' : '' %>><%= m %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="year" class="form-label">Year</label>
+                            <select id="year" name="year" class="form-select" required>
+                                <% const currentYear = new Date().getFullYear(); %>
+                                <% for(let i = currentYear; i >= currentYear - 5; i--) { %>
+                                    <option value="<%= i %>"><%= i %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    
+                    <button type="submit" class="btn btn-primary w-100 py-3 fs-5 shadow-sm">
+                        <i class="bi bi-gear-wide-connected me-2"></i> Process Monthly Payroll
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Column -->
+    <div class="col-lg-5">
+        <!-- Formula Breakdown -->
+        <div class="card shadow-sm mb-4 border-0" style="background: linear-gradient(135deg, #05486c 0%, #0e3862 100%); color: white;">
+            <div class="card-body p-4">
+                <h5 class="mb-3"><i class="bi bi-calculator me-2"></i> Payroll Formula</h5>
+                <ul class="list-unstyled mb-0" style="font-size: 0.9rem; opacity: 0.9;">
+                    <li class="mb-2 d-flex justify-content-between">
+                        <span>Gross Pay:</span>
+                        <span>Basic + Allowance + OT</span>
+                    </li>
+                    <li class="mb-2 d-flex justify-content-between">
+                        <span>Tax Deduction:</span>
+                        <span>8% of Gross</span>
+                    </li>
+                    <li class="mb-2 d-flex justify-content-between">
+                        <span>EPF (Employee):</span>
+                        <span>11% of Gross</span>
+                    </li>
+                    <li class="mb-2 d-flex justify-content-between border-top pt-2">
+                        <span class="fw-bold">Net Pay:</span>
+                        <span class="fw-bold">Gross - (Tax + EPF)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recent Summary -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h5 class="mb-3 text-primary">Recent Batches</h5>
+                <% if (typeof recentBatches !== 'undefined' && recentBatches.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-borderless mb-0">
+                            <thead>
+                                <tr class="text-muted" style="font-size: 0.75rem;">
+                                    <th>PERIOD</th>
+                                    <th>STAFF</th>
+                                    <th class="text-end">TOTAL NET</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size: 0.85rem;">
+                                <% recentBatches.forEach(batch => { %>
+                                    <tr>
+                                        <td><%= batch.month %>/<%= batch.year %></td>
+                                        <td><%= batch.employee_count %></td>
+                                        <td class="text-end text-success">RM <%= parseFloat(batch.total_net_pay).toLocaleString(undefined, {minimumFractionDigits: 2}) %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-muted small mb-0">No records generated yet.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>

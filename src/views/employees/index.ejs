@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Employees</h2>
+    <a href="/employees/create" class="btn btn-primary">Add New Employee</a>
+</div>
+
+<!-- Simple Filter -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form action="/employees" method="GET" class="row align-items-end g-3">
+            <div class="col-md-8">
+                <label for="department_id" class="form-label">Filter by Department</label>
+                <select name="department_id" id="department_id" class="form-select">
+                    <option value="">All Departments</option>
+                    <% if (typeof departments !== 'undefined') { %>
+                        <% departments.forEach(function(dept) { %>
+                            <option value="<%= dept.id %>" <%= typeof currentFilter !== 'undefined' && currentFilter == dept.id ? 'selected' : '' %>>
+                                <%= dept.name %>
+                            </option>
+                        <% }); %>
+                    <% } %>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <% if (typeof currentFilter !== 'undefined' && currentFilter) { %>
+                    <a href="/employees" class="btn btn-light ms-2">Clear</a>
+                <% } %>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <% if (typeof employees !== 'undefined' && employees.length > 0) { %>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Department</th>
+                            <th>Basic Salary (RM)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% employees.forEach(function(emp) { %>
+                            <tr>
+                                <td><%= emp.id %></td>
+                                <td><strong><%= emp.name %></strong></td>
+                                <td><%= emp.position %></td>
+                                <td><span class="badge bg-secondary"><%= emp.department_name %></span></td>
+                                <td><%= parseFloat(emp.basic_salary).toFixed(2) %></td>
+                                <td>
+                                    <a href="/employees/<%= emp.id %>/edit" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <form action="/employees/<%= emp.id %>/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this employee?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <% if (typeof pagination !== 'undefined' && pagination.totalPages > 1) { %>
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item <%= pagination.page === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="/employees?page=<%= pagination.page - 1 %><%= typeof currentFilter !== 'undefined' && currentFilter ? '&department_id=' + currentFilter : '' %>">Previous</a>
+                        </li>
+                        
+                        <% for(let i = 1; i <= pagination.totalPages; i++) { %>
+                            <li class="page-item <%= pagination.page === i ? 'active' : '' %>">
+                                <a class="page-link" href="/employees?page=<%= i %><%= typeof currentFilter !== 'undefined' && currentFilter ? '&department_id=' + currentFilter : '' %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        
+                        <li class="page-item <%= pagination.page === pagination.totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="/employees?page=<%= pagination.page + 1 %><%= typeof currentFilter !== 'undefined' && currentFilter ? '&department_id=' + currentFilter : '' %>">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            <% } %>
+        <% } else { %>
+            <div class="text-center text-muted p-4">
+                <p>No employees found.</p>
+            </div>
+        <% } %>
+    </div>
+</div>

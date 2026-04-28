@@ -1,0 +1,61 @@
+<h2 class="mb-3">Dashboard</h2>
+<p class="text-muted mb-4">Welcome back, <strong><%= typeof user !== 'undefined' ? user.name : 'User' %></strong>!</p>
+
+<div class="row g-4 mb-4">
+    <!-- Quick Stats Cards -->
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <h5 class="text-muted mb-3">Total Departments</h5>
+                <h1 class="display-4 fw-bold text-primary mb-0">
+                    <%= typeof stats !== 'undefined' ? stats.departments : '0' %>
+                </h1>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <h5 class="text-muted mb-3">Total Employees</h5>
+                <h1 class="display-4 fw-bold text-primary mb-0">
+                    <%= typeof stats !== 'undefined' ? stats.employees : '0' %>
+                </h1>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center p-4">
+                <h5 class="text-muted mb-3">Payroll Records</h5>
+                <h1 class="display-4 fw-bold text-primary mb-0">
+                    <%= typeof stats !== 'undefined' ? stats.records : '0' %>
+                </h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Quick Actions -->
+    <div class="col-md-12">
+        <div class="card shadow-sm h-100">
+            <div class="card-body p-4">
+                <h4 class="mb-3">Quick Actions</h4>
+                <div class="list-group list-group-flush">
+                    <a href="/employees/create" class="list-group-item list-group-item-action text-primary fw-medium border-0 px-0">
+                        <i class="bi bi-plus-circle me-2"></i> Add New Employee
+                    </a>
+                    <a href="/departments/create" class="list-group-item list-group-item-action text-primary fw-medium border-0 px-0">
+                        <i class="bi bi-plus-circle me-2"></i> Add New Department
+                    </a>
+                    <a href="/payroll/run" class="list-group-item list-group-item-action text-primary fw-medium border-0 px-0">
+                        <i class="bi bi-play-circle me-2"></i> Run Monthly Payroll
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>

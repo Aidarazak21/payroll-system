@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Payroll History</h2>
+    <a href="/payroll/run" class="btn btn-primary">Run New Payroll</a>
+</div>
+
+<!-- Filter -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form action="/payroll/history" method="GET" class="row align-items-end g-3">
+            <div class="col-md-5">
+                <label for="month" class="form-label">Month</label>
+                <select name="month" id="month" class="form-select">
+                    <option value="">All Months</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label for="year" class="form-label">Year</label>
+                <select name="year" id="year" class="form-select">
+                    <option value="">All Years</option>
+                    <% const currentYear = new Date().getFullYear(); %>
+                    <% for(let i = currentYear; i >= currentYear - 5; i--) { %>
+                        <option value="<%= i %>"><%= i %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <% if (typeof records !== 'undefined' && records.length > 0) { %>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Period</th>
+                            <th>Employee</th>
+                            <th>Gross Pay</th>
+                            <th>Net Pay</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% records.forEach(function(record) { %>
+                            <tr>
+                                <td><span class="badge bg-secondary"><%= record.month %>/<%= record.year %></span></td>
+                                <td><strong><%= record.employee_name %></strong></td>
+                                <td>RM <%= parseFloat(record.gross_pay).toFixed(2) %></td>
+                                <td><strong class="text-success">RM <%= parseFloat(record.net_pay).toFixed(2) %></strong></td>
+                                <td>
+                                    <a href="/payroll/payslip/<%= record.id %>" class="btn btn-sm btn-outline-primary">View Payslip</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <% if (typeof pagination !== 'undefined' && pagination.totalPages > 1) { %>
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item <%= pagination.page === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="/payroll/history?page=<%= pagination.page - 1 %><%= typeof month !== 'undefined' && month ? '&month=' + month : '' %><%= typeof year !== 'undefined' && year ? '&year=' + year : '' %>">Previous</a>
+                        </li>
+                        
+                        <% for(let i = 1; i <= pagination.totalPages; i++) { %>
+                            <li class="page-item <%= pagination.page === i ? 'active' : '' %>">
+                                <a class="page-link" href="/payroll/history?page=<%= i %><%= typeof month !== 'undefined' && month ? '&month=' + month : '' %><%= typeof year !== 'undefined' && year ? '&year=' + year : '' %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        
+                        <li class="page-item <%= pagination.page === pagination.totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="/payroll/history?page=<%= pagination.page + 1 %><%= typeof month !== 'undefined' && month ? '&month=' + month : '' %><%= typeof year !== 'undefined' && year ? '&year=' + year : '' %>">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            <% } %>
+        <% } else { %>
+            <div class="text-center text-muted p-4">
+                <p>No payroll records found.</p>
+            </div>
+        <% } %>
+    </div>
+</div>
